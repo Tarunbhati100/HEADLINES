@@ -63,15 +63,18 @@ class HeadlineDetailScreen extends StatelessWidget {
                             fontSize: 29,
                             fontWeight: FontWeight.w700),
                       ),
-                      Padding(
+                      Container(
                         padding: const EdgeInsets.only(top: 64, bottom: 16.0),
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              site,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                            Flexible(
+                              child: Text(
+                                site,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
                             ),
                             if (date != "")
                               Text(

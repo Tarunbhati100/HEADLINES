@@ -3,8 +3,12 @@ import 'package:news/HedlineDetailScreen.dart';
 import 'package:news/utils/news.dart';
 import 'package:news/utils/api.dart';
 import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
   runApp(const MyApp());
 }
 
@@ -37,6 +41,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Box? box;
   @override
   void initState() {
     final dataProvider = Provider.of<GetDataProvider>(context, listen: false);
@@ -58,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.black,
       ),
       body: RefreshIndicator(
-        onRefresh: () async{
+        onRefresh: () async {
           dataProvider.getMyData();
         },
         child: Container(
@@ -116,13 +121,16 @@ class _MyHomePageState extends State<MyHomePage> {
                               padding: const EdgeInsets.all(5),
                               color: Colors.black38,
                               child: Row(
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    newNews.site.toString(),
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
+                                  Flexible(
+                                    child: Text(
+                                      newNews.site.toString(),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),

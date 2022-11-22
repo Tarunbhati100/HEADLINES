@@ -50,7 +50,8 @@ class HeadlineDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
+                Container(
+                  color: Colors.black26,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 24.0, vertical: 5),
                   child: Column(

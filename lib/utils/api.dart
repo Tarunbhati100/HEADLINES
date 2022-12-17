@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart' as path;
@@ -28,24 +29,36 @@ class GetDataProvider with ChangeNotifier {
   }
 
   Future<List<news>> getAllData() async {
-    await openBox();
+    if (kIsWeb) {
+    } else {
+      await openBox();
+    }
     try {
-      final response = await http.get(Uri.parse(
-          "https://newsapi.org/v2/everything?q=tesla&from=2022-10-22&sortBy=publishedAt&apiKey=f8d23c86fb5d4c90aa5c570fd18f370d"));
+      final url =
+          "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=f8d23c86fb5d4c90aa5c570fd18f370d";
+      final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final items = json.decode(response.body);
-        await putData(items["articles"]);
+        if (kIsWeb) {
+          items["articles"].forEach((v) {
+            responseData.add(news.fromJson(v));
+          });
+        } else
+          await putData(items["articles"]);
       } else {
-        print("else");
+        print("Not Connected to API");
       }
     } catch (e) {
       log(e.toString());
     }
-    var mymap = box?.toMap().values.toList();
-    if (mymap != null && !(mymap.isEmpty)) {
-      mymap.forEach((v) {
-        responseData.add(news.fromJson(v));
-      });
+    if (kIsWeb) {
+    } else {
+      var mymap = box?.toMap().values.toList();
+      if (mymap != null && !(mymap.isEmpty)) {
+        mymap.forEach((v) {
+          responseData.add(news.fromJson(v));
+        });
+      }
     }
     notifyListeners();
     return responseData;

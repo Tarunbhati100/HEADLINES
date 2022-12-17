@@ -68,101 +68,107 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: Container(
           color: const Color.fromRGBO(70, 70, 70, 1),
-          child: ListView.builder(
-              itemCount: dataProvider.responseData.length,
-              itemBuilder: (context, index) {
-                news newNews = dataProvider.responseData[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HeadlineDetailScreen(
-                                  imageUrl: newNews.url.toString(),
-                                  date: newNews.date.toString(),
-                                  description: newNews.description.toString(),
-                                  headline: newNews.headline.toString(),
-                                  site: newNews.site.toString(),
-                                )));
-                  },
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 250),
-                    child: Container(
-                      // height: 200,
-                      // padding: const EdgeInsets.all(12),
-                      margin:
-                          const EdgeInsets.only(left: 16, right: 16, top: 16),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                              newNews.url.toString(),
-                            ),
-                            onError: (exception, stackTrace) =>
-                                print("No image Found"),
-                            fit: BoxFit.fill),
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: ListView.builder(
+                  itemCount: dataProvider.responseData.length,
+                  itemBuilder: (context, index) {
+                    news newNews = dataProvider.responseData[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HeadlineDetailScreen(
+                                      imageUrl: newNews.url != null
+                                              ? newNews.url.toString()
+                                              : ""
+                                          ,
+                                      date: newNews.date != null
+                                              ? newNews.date.toString().toString():"",
+                                      description:newNews.description != null
+                                              ? newNews.description.toString():"",
+                                      headline: newNews.headline != null
+                                              ? newNews.headline.toString():"",
+                                      site: newNews.site != null
+                                              ? newNews.site.toString():"",
+                                    )));
+                      },
                       child: Container(
-                        color: Colors.black26,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              color: Colors.black38,
-                              margin: const EdgeInsets.only(bottom: 24),
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                newNews.headline.toString(),
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
+                        height: MediaQuery.of(context).size.height * 0.7,
+
+                        // padding: const EdgeInsets.all(12),
+                        margin:
+                            const EdgeInsets.only(left: 16, right: 16, top: 16),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                newNews.url.toString(),
                               ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              color: Colors.black38,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      newNews.site.toString(),
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                      DateTime.parse(newNews.date.toString())
-                                              .year
-                                              .toString() +
-                                          "-" +
-                                          DateTime.parse(
-                                                  newNews.date.toString())
-                                              .month
-                                              .toString() +
-                                          "-" +
-                                          DateTime.parse(
-                                                  newNews.date.toString())
-                                              .day
-                                              .toString(),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 12),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
+                              onError: (exception, stackTrace) =>
+                                  print("No image Found"),
+                              fit: BoxFit.fill),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
+                        child: InfoWidget(newNews),
                       ),
-                    ),
-                  ),
-                );
-              }),
+                    );
+                  }),
+            ),
+          ),
         ),
+      ),
+    );
+  }
+
+  Container InfoWidget(news newNews) {
+    return Container(
+      color: Colors.black45,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            color: Colors.black38,
+            margin: const EdgeInsets.only(bottom: 24),
+            padding: const EdgeInsets.all(5),
+            child: Text(
+              newNews.headline.toString(),
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(5),
+            color: Colors.black38,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Flexible(
+                  child: Text(
+                    newNews.site.toString(),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    DateTime.parse(newNews.date.toString()).year.toString() +
+                        "-" +
+                        DateTime.parse(newNews.date.toString())
+                            .month
+                            .toString() +
+                        "-" +
+                        DateTime.parse(newNews.date.toString()).day.toString(),
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

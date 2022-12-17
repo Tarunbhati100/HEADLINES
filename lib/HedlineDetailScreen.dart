@@ -26,6 +26,7 @@ class HeadlineDetailScreen extends StatelessWidget {
               fit: BoxFit.cover,
               onError: (exception, stackTrace) => print(exception),
             ),
+            color: Colors.black,
           ),
           foregroundDecoration: BoxDecoration(color: Colors.black12),
           child: Container(
